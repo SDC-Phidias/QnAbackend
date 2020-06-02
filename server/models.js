@@ -38,8 +38,17 @@ module.exports = {
   getAllExceptPhotos: async (productId) => {
     try {
       return await db.query(
-        `SELECT * FROM public.questions as pq LEFT join public.answers as pa ON pq.id = pa.question_id WHERE pq.product_id IN (${productId}) 
-          `
+        // `SELECT * FROM public.questions as pq LEFT join public.answers as pa ON pq.id = pa.question_id WHERE pq.product_id IN (${productId})
+        //   `
+        //SELECT json_build_object('id', public.answer_backup.id,'body', public.answer_backup.body) FROM public.answer_backup WHERE answer_backup.question_id IN (139)
+
+        `SELECT *
+FROM questions 
+INNER JOIN answers 
+on questions.id = answers.question_id
+and  questions.product_id = 139
+LEFT JOIN answer_photos
+on answer_id = answers.id`
       );
     } catch (err) {
       console.log(err);
@@ -47,8 +56,29 @@ module.exports = {
   },
 };
 
+/*SELECT *
+FROM questions 
+INNER JOIN answers 
+on questions.id = answers.question_id
+and  questions.product_id = 1
+LEFT JOIN answer_photos
+on answer_id = answers.id
+*/
+
 // SELECT * FROM member_copy WHERE id IN (17579, 17580, 17582);
 /*
+SELECT answer_id, string_agg(url, ', ')
+FROM photo_backup
+GROUP BY answer_id
+---------
+CREATE TABLE new_table
+  AS (SELECT * FROM old_table);
+  -----------
+  SELECT *
+FROM answers
+LEFT JOIN aggregation 
+on answers.id = aggregation.answer_id
+ORDER BY answers.id ASC
 http://18.224.200.47/reviews/133/list/?page=1&count=10&sort=newest
 "product_id": "1",
 "results": [

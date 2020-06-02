@@ -4,10 +4,11 @@ const CSVCleaner = require("./CSVCleanerTransformer");
 const transformer = new CSVCleaner({ writableObjectMode: true });
 
 let readStream = fs.createReadStream(
-  "/Users/ahsanawan/QnAbackend/etl/data/questions.csv"
+  "/Users/ahsanawan/QnAbackend/etl/data/transform_test.csv"
 );
+
 let writeStream = fs.createWriteStream(
-  "/Users/ahsanawan/QnAbackend/etl/data/newtest.csv"
+  "/Users/ahsanawan/QnAbackend/etl/data/transform_test2.csv"
 );
 
 const createCsvStringifier = require("csv-writer").createObjectCsvStringifier;

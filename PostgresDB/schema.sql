@@ -42,6 +42,6 @@ ALTER TABLE qna.answers ADD CONSTRAINT fk_answers_questions FOREIGN KEY ( questi
 
 COPY qna.questions FROM "/Users/ahsanawan/QnAbackend/etl/data/questions.csv" DELIMITER "," CSV HEADER ;
 
-COPY qna.answers FROM "/Users/ahsanawan/QnAbackend/etl/data/answers.csv" DELIMITER "," CSV HEADER ;
+COPY qna.answers FROM '/Users/ahsanawan/QnAbackend/etl/data/answers.csv' DELIMITER ',' CSV HEADER ;
 
-COPY qna.answer_photos FROM "/Users/ahsanawan/QnAbackend/etl/data/answers_photos.csv" DELIMITER "," CSV HEADER ;
+COPY qna.answer_photos FROM '/Users/ahsanawan/QnAbackend/etl/data/answers_photos.csv' DELIMITER ',' CSV HEADER ;

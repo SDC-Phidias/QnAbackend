@@ -18,6 +18,15 @@ app.get("/qa/:productId", async (req, res) => {
 
     let questions = await Model.getQuestionsByProduct(productId);
     let questionList = await mutateQuestions(questions.rows);
+    let answers = await Model.getAnswersByQuestions(
+      questionList.map((question) => question.question_id)
+    );
+    console.log(answers);
+
+    let fullphotos = await Model.getPhotosByAnswers(
+      answers.map((answer) => answer.id)
+    );
+    // let finalQuestion = await Model.getAllExceptPhotos(productId);
     // let fullList = await Model.getAllExceptPhotos(productId);
 
     function mutateQuestions(input) {
@@ -43,14 +52,6 @@ app.get("/qa/:productId", async (req, res) => {
     //   req.query.page,
     //   req.query.count
     // );
-
-    let answers = await Model.getAnswersByQuestions(
-      questionList.map((question) => question.question_id)
-    );
-
-    let fullphotos = await Model.getPhotosByAnswers(
-      answers.map((answer) => answer.id)
-    );
 
     function addPhotos(input) {
       for (const answer of input) {

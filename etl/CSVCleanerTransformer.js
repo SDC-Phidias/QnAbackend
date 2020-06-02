@@ -21,16 +21,20 @@ class CSVCleaner extends Transform {
   }
   _transform(chunk, encoding, next) {
     for (let key in chunk) {
-      //trims whitespace
-      let trimKey = key.trim();
-      chunk[trimKey] = chunk[key];
-      if (key !== trimKey) {
+      // trims whitespace
+      if (!chunk[key]) {
+        let trimKey = key.trim();
+        chunk[trimKey] = chunk[key];
+      }
+      if (key !== key.trim()) {
         delete chunk[key];
       }
     }
+
     // filters out all non-number characters
     // let onlyNumbers = chunk.default_price.replace(/\D/g, "");
     // chunk.default_price = onlyNumbers;
+
     chunk = csvStringifier.stringifyRecords([chunk]);
     // chunk = skusCsvStringifier.stringifyRecords([chunk]);
     this.push(chunk);
