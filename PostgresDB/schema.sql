@@ -3,7 +3,7 @@ IF NOT EXISTS qna;
 
 CREATE TABLE qna.questions
 (
-    id integer NOT NULL ,
+    id bigserial NOT NULL ,
     product_id integer   ,
     body varchar(1000)   ,
     date_written varchar(50)   ,
