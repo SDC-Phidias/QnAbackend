@@ -2,16 +2,30 @@ const db = require("../etl/postGresConnect");
 
 module.exports = {
   getQuestionsByProduct: async (productId) => {
+    const client = await db.connect();
+
     try {
-      return await db
+      return await client
         .query(
           `SELECT * FROM public.questions WHERE product_id IN (${productId});`
         )
         .then((questions) => questions.rows);
-    } catch (err) {
-      console.log(err);
+    } finally {
+      client.release();
     }
   },
+
+  // getQuestionsByProduct: async (productId) => {
+  //   try {
+  //     return await db
+  //       .query(
+  //         `SELECT * FROM public.questions WHERE product_id IN (${productId});`
+  //       )
+  //       .then((questions) => questions.rows);
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // },
 
   getAnswersByQuestions: async (questionId) => {
     try {
@@ -128,27 +142,44 @@ module.exports = {
   },
 
   getAllExceptQuestions: async (questionId) => {
+    const client = await db.connect();
     try {
-      return await db.query(
-        // `SELECT * FROM public.questions as pq LEFT join public.answers as pa ON pq.id = pa.question_id WHERE pq.product_id IN (${productId})
-        //   `
-        //SELECT json_build_object('id', public.answer_backup.id,'body', public.answer_backup.body) FROM public.answer_backup WHERE answer_backup.question_id IN (139)
-
-        //         `SELECT *
-        // FROM questions
-        // INNER JOIN answers
-        // on questions.id = answers.question_id
-        // and  questions.product_id = 139
-        // LEFT JOIN answer_photos
-        // on answer_id = answers.id`
+      return await client.query(
         `SELECT * FROM public.finalaggregate WHERE question_id IN (${questionId});`
       );
-    } catch (err) {
-      console.log(err);
+    } finally {
+      client.release();
     }
   },
+
+  // `SELECT * FROM public.questions as pq LEFT join public.answers as pa ON pq.id = pa.question_id WHERE pq.product_id IN (${productId})
+  //   `
+  //SELECT json_build_object('id', public.answer_backup.id,'body', public.answer_backup.body) FROM public.answer_backup WHERE answer_backup.question_id IN (139)
+
+  //         `SELECT *
+  // FROM questions
+  // INNER JOIN answers
+  // on questions.id = answers.question_id
+  // and  questions.product_id = 139
+  // LEFT JOIN answer_photos
+  // on answer_id = answers.id`
+  // getAllExceptQuestions: async (questionId) => {
+  //   try {
+  //     return await db.query(
+
+  //       `SELECT * FROM public.finalaggregate WHERE question_id IN (${questionId});`
+  //     );
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // },
 };
 //create index on characteristics(product_id)
+// } catch (err) {
+//   console.log(err);
+// } finally {
+//   client.release();
+// }
 
 /*SELECT *
 FROM questions 

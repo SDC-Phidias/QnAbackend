@@ -7,6 +7,7 @@ const cors = require("cors");
 const Model = require("./models.js");
 
 const app = express();
+const database = require("../etl/postGresConnect");
 app.use(bodyParser());
 app.use(morgan("dev"));
 app.use(cors());
@@ -17,10 +18,9 @@ app.get("/loaderio-43ddd1ca0165d84a058c29a200eeca27.html", (req, res) => {
 
 app.get("/qa/:productId", async (req, res) => {
   try {
+    // const client = await database.connect();
     let productId = req.params.productId;
-
     let questions = await Model.getQuestionsByProduct(productId);
-
     // if (questions.length === 0) {
     //   var questionList = await mutateQuestions(questions);
     //   finalQuestion = {};
@@ -31,11 +31,19 @@ app.get("/qa/:productId", async (req, res) => {
     //   questionList.map((question) => question.question_id)
     // );
     let answers =
-      (await Model.getAllExceptQuestions(
-        questionList.map((question) =>
-          question.question_id ? question.question_id : question.id
-        )
-      )) || [];
+      questionList.length > 0
+        ? await Model.getAllExceptQuestions(
+            questionList.map((question) =>
+              question.question_id ? question.question_id : question.id
+            )
+          )
+        : [];
+    // let answers =
+    //   (await Model.getAllExceptQuestions(
+    //     questionList.map((question) =>
+    //       question.question_id ? question.question_id : question.id
+    //     )
+    //   )) || [];
 
     let finalanswers = await mutateAnswers(answers.rows ? answers.rows : []);
 

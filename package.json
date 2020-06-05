@@ -19,6 +19,8 @@
   },
   "homepage": "https://github.com/SDC-Phidias/QnAbackend#readme",
   "devDependencies": {
+    "artillery": "^1.6.0",
+    "faker": "^4.1.0",
     "loadtest": "*"
   },
   "dependencies": {
