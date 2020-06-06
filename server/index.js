@@ -12,6 +12,10 @@ app.use(bodyParser());
 app.use(morgan("dev"));
 app.use(cors());
 
+app.get("/", (req, res) => {
+  res.send("hello world");
+});
+
 app.get("/loaderio-43ddd1ca0165d84a058c29a200eeca27.html", (req, res) => {
   res.send("loaderio-43ddd1ca0165d84a058c29a200eeca27");
 });
