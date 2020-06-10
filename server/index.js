@@ -22,18 +22,11 @@ app.get("/loaderio-43ddd1ca0165d84a058c29a200eeca27.html", (req, res) => {
 
 app.get("/qa/:productId", async (req, res) => {
   try {
-    // const client = await database.connect();
     let productId = req.params.productId;
     let questions = await Model.getQuestionsByProduct(productId);
-    // if (questions.length === 0) {
-    //   var questionList = await mutateQuestions(questions);
-    //   finalQuestion = {};
-    // } else {
-    // }
+
     let questionList = await mutateQuestions(questions);
-    // let answers = await Model.getAnswersByQuestions(
-    //   questionList.map((question) => question.question_id)
-    // );
+
     let answers =
       questionList.length > 0
         ? await Model.getAllExceptQuestions(
@@ -42,22 +35,9 @@ app.get("/qa/:productId", async (req, res) => {
             )
           )
         : [];
-    // let answers =
-    //   (await Model.getAllExceptQuestions(
-    //     questionList.map((question) =>
-    //       question.question_id ? question.question_id : question.id
-    //     )
-    //   )) || [];
 
     let finalanswers = await mutateAnswers(answers.rows ? answers.rows : []);
 
-    // console.log(answers);
-
-    // let fullphotos = await Model.getPhotosByAnswers(
-    //   answers.map((answer) => answer.id)
-    // );
-    // let finalQuestion = await Model.getAllExceptPhotos(productId);
-    // let fullList = await Model.getAllExceptPhotos(productId);
     function mutateAnswers(input) {
       for (const answer of input) {
         if (
@@ -80,31 +60,15 @@ app.get("/qa/:productId", async (req, res) => {
           question["question_helpfulness"] = question["helpful"];
           question["question_id"] = question["id"];
           question["question_body"] = question["body"];
-          question["question_date"] = question["date_written"]; // Assign new key
+          question["question_date"] = question["date_written"];
           delete question["helpful"];
           delete question["id"];
           delete question["body"];
-          delete question["date_written"]; // Delete old key
+          delete question["date_written"];
         }
       }
       return input;
     }
-
-    // console.log("QUESTIONS:", questions.rows);
-
-    // function addPhotos(input) {
-    //   for (const answer of input) {
-    //     answer.photos = [];
-
-    //     for (photo of fullphotos) {
-    //       if (photo.answer_id === answer.id) {
-    //         answer.photos.push(photo.url);
-    //       }
-    //     }
-    //   }
-    //   return input;
-    // }
-    // let finalAnswers = await addPhotos(answers);
 
     let finalQuestion = await addAnswers(questionList);
     function addAnswers(input) {
@@ -138,7 +102,6 @@ app.get("/qa/:productId", async (req, res) => {
     res.send({
       product_id: productId,
       results: finalQuestion,
-      // lists: finalanswers,
     });
   } catch (err) {
     console.error(err);

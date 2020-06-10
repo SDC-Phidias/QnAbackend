@@ -19,8 +19,12 @@ const pool = new Pool({
   user: "postgres",
   password: "password",
   database: "QnA",
-  max: 10,
+  max: 15,
   idleTimeoutMillis: 15000,
+});
+
+pool.on("connect", () => {
+  return console.log("connected");
 });
 
 module.exports = pool;
